@@ -1,0 +1,97 @@
+package com.Mychat.LoginFrame;
+import java.net.*;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.UIManager;
+
+public class LoginFrame extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField txtName;
+	private JTextField txtAddress;
+	private JTextField txtPort;
+
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					LoginFrame frame = new LoginFrame();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public LoginFrame() {
+       try {
+    	   UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    	   } catch (Exception e){
+    		   e.printStackTrace();
+    	   }
+	    setResizable(false);
+		setTitle("Login");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(300, 360);
+		setLocationRelativeTo(null);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		txtName = new JTextField();
+		txtName.setText(System.getProperty("user.name"));
+		txtName.setBounds(10, 56, 274, 20);
+		contentPane.add(txtName);
+		txtName.setColumns(10);
+		
+		JButton btnNewButton = new JButton("Enter Chat");
+		btnNewButton.setBounds(83, 298, 127, 23);
+		contentPane.add(btnNewButton);
+		
+		JLabel lblName = new JLabel("Name:");
+		lblName.setBounds(10, 35, 69, 20);
+		contentPane.add(lblName);
+		
+		txtAddress = new JTextField();
+		try{
+			txtAddress.setText(InetAddress.getLocalHost().getHostAddress());
+		}catch(Exception ex){
+				
+		}
+		System.getProperty("user.name");
+
+		txtAddress.setColumns(10);
+		txtAddress.setBounds(10, 127, 274, 20);
+		contentPane.add(txtAddress);
+		
+		JLabel lblAddress = new JLabel("IP Address");
+		lblAddress.setBounds(10, 107, 69, 20);
+		contentPane.add(lblAddress);
+		
+		txtPort = new JTextField();
+		txtPort.setColumns(10);
+		txtPort.setBounds(10, 196, 274, 20);
+		contentPane.add(txtPort);
+		
+		JLabel lblPort = new JLabel("Port ");
+		lblPort.setBounds(10, 172, 69, 20);
+		contentPane.add(lblPort);
+		
+		JLabel lblEgIp = new JLabel("Eg. 192.168.0.2");
+		lblEgIp.setBounds(193, 148, 91, 14);
+		contentPane.add(lblEgIp);
+		
+		JLabel lblEgport = new JLabel("Eg.25565");
+		lblEgport.setBounds(227, 218, 57, 14);
+		contentPane.add(lblEgport);
+	}
+}
