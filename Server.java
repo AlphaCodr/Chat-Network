@@ -18,12 +18,13 @@ public class Server {
     static ServerSocket serverSocket;
     static Socket clientSocket;
     static InetAddress addressVariable;
-    static byte[] addressByte = {(byte) 192, (byte) 168, (byte) 1, (byte) 6};
+    static byte[] addressByte = {(byte) 192, (byte) 168, (byte) 1, (byte) 3};
     
     static ArrayList<Socket> clientSocketList;
     static ArrayList<Integer> clientStatesList;
     static ArrayList<DataPackage> clientDataPackageList;
     static ArrayList<String> blockedList;
+    static DefaultListModel listModel;
     
     static ObjectOutputStream outputStream;
     static ObjectInputStream inputStream;
@@ -43,6 +44,7 @@ public class Server {
                         clientSocketList.add(clientSocket);
                         clientDataPackageList.add(dataPackage);
                         clientStatesList.add(state);
+                        listModel.addElement(dataPackage.getUsername());
                     }else if(checkIfBlocked(dataPackage)){
                         
                     }
@@ -50,6 +52,7 @@ public class Server {
                 }catch(Exception ex){
                     JOptionPane.showMessageDialog(null, "Error: Could not Accept Client", 
                             "Error", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 }
             }
         }
@@ -126,11 +129,23 @@ public class Server {
                 JOptionPane.showMessageDialog(null, "Error: Could not get Address Variable", 
                     "Error", JOptionPane.ERROR_MESSAGE);
             }
-            serverSocket = new ServerSocket(27011, 0, addressVariable);
+            serverSocket = new ServerSocket(27011);
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(null, "Error: " +ex.getMessage(), 
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), 
                     "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
+        
+        MiniServerFrame serverFrame = new MiniServerFrame("Server Frame: " + serverUsername, 400, 500, serverIP){
+            @Override
+            public void blockClient(int index) {
+                String blockedClientIP = clientDataPackageList.get(index).getIP();
+                blockedList.add(index, blockedClientIP);
+                removeClient(index);
+            }
+        };
+        serverFrame.setVisible(true);
+        listModel = (DefaultListModel) serverFrame.getClientListModel();
         
         new Thread(acceptClients).start();
         
