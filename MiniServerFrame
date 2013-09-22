@@ -1,0 +1,88 @@
+/**
+ *
+ * @author Guest
+ */
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public abstract class MiniServerFrame extends JFrame{
+    
+    private String serverIP;
+    
+    private JPanel contentPanel, ipLabelPanel;
+    private JList clientList, blockedClientsList;
+    private JButton blockButton, viewProfileButton;
+    private JTabbedPane tabbedPane;
+    
+    public MiniServerFrame(String title, int width, int height, String ip){
+        this.serverIP = ip;
+        setTitle(title);
+        setSize(width, height);
+        setContentPane(createContent());
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+    
+    public JPanel createContent(){
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new GridLayout(1, 2));
+        
+        viewProfileButton = new JButton("View Profile");
+        viewProfileButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae){
+                
+            }
+        });
+        
+        blockButton = new JButton("Block Client");
+        blockButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae){
+                blockClient(clientList.getSelectedIndex());
+            }
+        });
+        
+        buttonsPanel.add(viewProfileButton);
+        buttonsPanel.add(blockButton);
+        
+        tabbedPane = new JTabbedPane();
+        
+        clientList = new JList();
+        DefaultListModel clientListModel = new DefaultListModel();
+        clientList.setModel(clientListModel);
+        
+        blockedClientsList = new JList();
+        DefaultListModel blockedClientListModel = new DefaultListModel();
+        blockedClientsList.setModel(blockedClientListModel);
+        
+        tabbedPane.add("Clients", new JScrollPane(clientList));
+        tabbedPane.add("Blocked Clients", new JScrollPane(blockedClientsList));
+        
+        ipLabelPanel = new JPanel();
+        ipLabelPanel.add(new JLabel(serverIP));
+        
+         contentPanel.add(buttonsPanel, BorderLayout.NORTH);
+         contentPanel.add(tabbedPane);
+         contentPanel.add(ipLabelPanel, BorderLayout.SOUTH);
+        
+        return contentPanel;
+    }
+    
+    public abstract void blockClient(int index);
+    
+    public ListModel getClientListModel(){
+        return clientList.getModel();
+    }
+    
+    public ListModel getBlockedListModel(){
+        return blockedClientsList.getModel();
+    }
+    
+}
