@@ -31,20 +31,7 @@ public class Client {
                         "Error: Could not connect to Server", 
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
-    };
-    
-    static Runnable updateDataPackage = new Runnable(){
-        public void run(){
-            while(true){
-                try{
-                    
-                }catch(Exception ex){
-                    JOptionPane.showMessageDialog(null, 
-                        "Error: Update Thread ", 
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
+            updateDataPackage();
         }
     };
     
@@ -66,7 +53,18 @@ public class Client {
         }
         
         DataPackage dataPackage = new DataPackage(username, ip, 1);
-        
+        new Thread(connectToServer).start();
+    }
+    
+    public static void updateDataPackage(){
+        try{
+            outputStream.writeObject(dataPackage);
+            Thread.sleep(60000);
+            updateDataPackage();
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public void changeName(String newName){
